@@ -1,4 +1,4 @@
-// script-zakat.js
+// zakat.js
 console.log("SCRIPT ZAKAT BERHASIL DIMUAT");
 const form = document.getElementById("form-zakat");
 const hasilBox = document.getElementById("hasil");

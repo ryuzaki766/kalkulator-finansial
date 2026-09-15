@@ -1,0 +1,97 @@
+.page--hub {
+  max-width: 760px;
+}
+
+.hero {
+  padding: 24px 0 48px;
+}
+
+.hero h1 {
+  max-width: 16ch;
+  margin: 0 0 16px;
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.hero p {
+  max-width: 48ch;
+  color: rgba(245, 241, 232, 0.65);
+  font-size: 1.05rem;
+}
+
+.daftar-kalkulator {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.kartu-kalkulator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px;
+  border-radius: 4px;
+  background: var(--parchment);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kartu-kalkulator:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.kartu-kalkulator:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.kartu-kalkulator__nomor {
+  color: var(--brass);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.kartu-kalkulator h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.kartu-kalkulator p {
+  flex-grow: 1;
+  margin: 0;
+  color: rgba(27, 36, 48, 0.7);
+  font-size: 0.92rem;
+}
+
+.kartu-kalkulator__aksi {
+  margin-top: 6px;
+  color: var(--navy);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.kartu-kalkulator--segera {
+  border: 1px dashed rgba(245, 241, 232, 0.25);
+  background: transparent;
+  color: rgba(245, 241, 232, 0.5);
+}
+
+.kartu-kalkulator--segera h2 {
+  color: rgba(245, 241, 232, 0.7);
+}
+
+.kartu-kalkulator--segera p,
+.kartu-kalkulator--segera .kartu-kalkulator__nomor {
+  color: rgba(245, 241, 232, 0.4);
+}
+
+@media (max-width: 560px) {
+  .daftar-kalkulator { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+}

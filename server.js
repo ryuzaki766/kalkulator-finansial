@@ -12,8 +12,17 @@ const PORT = process.env.PORT || 3000;
 // Supaya server bisa membaca JSON yang dikirim dari frontend
 app.use(express.json());
 
-// Sajikan semua file di folder public (index.html, style.css, script.js) sebagai website
+// Sajikan halaman dan aset statis dari folder public.
 app.use(express.static(path.join(__dirname, "public")));
+
+// URL halaman yang mudah dibaca, sementara file HTML tetap terorganisasi di public/pages.
+app.get("/kpr", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pages", "kpr.html"));
+});
+
+app.get("/zakat", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pages", "zakat.html"));
+});
 
 // ---- LOGIKA PERHITUNGAN KPR ----
 // Rumus anuitas: cicilan bulanan tetap dari pinjaman dengan bunga tetap per bulan

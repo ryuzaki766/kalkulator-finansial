@@ -1,60 +1,57 @@
-# Kalkulator Finansial — Kalkulator KPR
+# Kalkulator Finansial
 
-Website fullstack sederhana. Frontend (HTML/CSS/JS) mengirim data ke backend
-(Node.js + Express), backend menghitung, lalu hasilnya dikirim balik dan
-ditampilkan di halaman.
+Website fullstack sederhana untuk menghitung KPR dan zakat penghasilan.
+Frontend HTML/CSS/JavaScript mengirim data ke backend Node.js + Express,
+backend menghitung, lalu hasilnya ditampilkan kembali di halaman.
 
 ## Struktur folder
 
-```
+```text
 kalkulator-finansial/
-├── package.json      <- daftar dependency (Express)
-├── server.js         <- backend: server + logika hitung KPR
+├── package.json           <- dependency dan script npm
+├── server.js              <- backend, route halaman, dan API kalkulator
 └── public/
-    ├── index.html     <- struktur halaman
-    ├── style.css      <- tampilan
-    └── script.js      <- frontend: kirim data ke backend, tampilkan hasil
+    ├── index.html         <- halaman beranda
+    ├── pages/
+    │   ├── kpr.html       <- halaman kalkulator KPR
+    │   └── zakat.html     <- halaman kalkulator zakat
+    ├── css/
+    │   ├── base.css       <- token, layout, navigasi, elemen global
+    │   ├── home.css       <- gaya khusus halaman beranda
+    │   └── calculator.css <- gaya form dan hasil kalkulator
+    └── js/
+        ├── common.js      <- helper JavaScript bersama
+        ├── kpr.js         <- perilaku kalkulator KPR
+        └── zakat.js       <- perilaku kalkulator zakat
 ```
 
-## Cara menjalankan di VS Code
+## Cara menjalankan
 
-1. Buka folder `kalkulator-finansial` ini di VS Code (File > Open Folder).
-2. Buka Terminal di VS Code (Terminal > New Terminal).
-3. Pastikan Node.js sudah terinstall. Cek dengan:
-   ```
-   node -v
-   ```
-   Kalau belum ada, download dulu di https://nodejs.org (pilih versi LTS).
-4. Install dependency:
-   ```
-   npm install
-   ```
-5. Jalankan server:
-   ```
-   npm start
-   ```
-6. Buka browser, akses: http://localhost:3000
+1. Pastikan Node.js sudah terinstall: `node -v`.
+2. Install dependency: `npm install`.
+3. Jalankan server: `npm start`.
+4. Buka salah satu URL berikut:
+   - http://localhost:3000/
+   - http://localhost:3000/kpr
+   - http://localhost:3000/zakat
 
-Setiap kamu ubah kode di `server.js`, kamu perlu stop server (Ctrl+C di
-terminal) lalu `npm start` lagi. Untuk file di dalam `public/` (HTML/CSS/JS),
-cukup refresh browser.
+Setiap perubahan pada `server.js` membutuhkan restart server. Perubahan pada
+HTML, CSS, atau JavaScript cukup diuji dengan refresh browser.
 
-## Cara kerja alurnya (fullstack flow)
+## Cara kerja
 
-1. User isi form di `index.html` lalu klik "Hitung cicilan".
-2. `script.js` (frontend) mengambil isian form dan mengirimnya lewat
-   `fetch()` ke `POST /api/kalkulator/kpr`.
-3. `server.js` (backend) menerima data itu, menghitung cicilan pakai
-   rumus anuitas, lalu mengirim hasilnya balik dalam format JSON.
-4. `script.js` menerima hasil itu dan menampilkannya di halaman.
+1. User membuka halaman `/kpr` atau `/zakat` dan mengisi form.
+2. Script frontend mengambil input dan mengirimnya lewat `fetch()` ke API.
+3. `server.js` memvalidasi data, menghitung hasil, lalu mengirim JSON.
+4. Script halaman menerima hasil dari backend dan menampilkannya.
 
-Ini pola dasar yang akan kamu pakai lagi untuk kalkulator lain
-(zakat, bunga tabungan, dst) — cukup tambah endpoint baru di server.js
-dan form baru di frontend.
+Endpoint yang tersedia:
 
-## Langkah selanjutnya (kalau mau lanjut)
+- `POST /api/kalkulator/kpr`
+- `POST /api/kalkulator/zakat`
 
-- Tambah kalkulator kedua (misal Zakat) dengan pola yang sama.
-- Tambah halaman terpisah per kalkulator untuk SEO (`/kalkulator-zakat`, dst).
-- Deploy ke Vercel atau Railway supaya bisa diakses publik.
-- Baru daftar Google AdSense setelah situs online dan ada pengunjung.
+## Catatan
+
+- Angka rupiah pada input diformat otomatis dengan pemisah titik.
+- Logika perhitungan berada di backend agar hasil konsisten.
+- API menerima angka JSON, bukan string dengan format rupiah.
