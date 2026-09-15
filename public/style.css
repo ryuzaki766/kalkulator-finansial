@@ -1,0 +1,608 @@
+---- Tokens ----
+:root {
+  --navy: #101820;
+  --navy-soft: #182430;
+  --parchment: #EFE9DA;
+  --parchment-line: #DCD3BC;
+  --ink: #1B2430;
+  --warm-white: #F5F1E8;
+  --brass: #B98B4E;
+  --brass-bright: #D6A85F;
+  --teal: #4C7C6B;
+  --error: #B5533C;
+
+  --serif: "Fraunces", serif;
+  --sans: "IBM Plex Sans", sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--navy);
+  color: var(--warm-white);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+/* ---- Topbar ---- */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.topbar__mark {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.topbar__nav {
+  font-size: 0.85rem;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+/* ---- Layout ---- */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+}
+
+.intro h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.4rem;
+  margin: 0 0 12px;
+  max-width: 14ch;
+}
+
+.intro p {
+  color: rgba(245, 241, 232, 0.7);
+  max-width: 46ch;
+  margin: 0 0 40px;
+}
+
+/* ---- Card (form) ---- */
+.ledger-card {
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 4px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  color: rgba(27, 36, 48, 0.75);
+}
+
+.field input {
+  border: none;
+  border-bottom: 1.5px solid var(--parchment-line);
+  background: transparent;
+  padding: 8px 2px;
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.field input:focus {
+  border-bottom-color: var(--brass);
+}
+
+.field input::placeholder {
+  color: rgba(27, 36, 48, 0.32);
+}
+
+.btn-hitung {
+  margin-top: 8px;
+  border: none;
+  background: var(--navy);
+  color: var(--warm-white);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 14px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-hitung:hover {
+  background: var(--navy-soft);
+}
+
+.btn-hitung:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.pesan-error {
+  color: var(--error);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ---- Result ---- */
+.ledger-result {
+  margin-top: 24px;
+  border: 1px solid rgba(245, 241, 232, 0.15);
+  border-radius: 4px;
+  padding: 28px 32px;
+}
+
+.ledger-result__utama {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.15);
+}
+
+.ledger-result__label {
+  font-size: 0.85rem;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+.ledger-result__angka {
+  font-family: var(--mono);
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: var(--brass-bright);
+}
+
+.ledger-result__rincian {
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rincian-baris {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: rgba(245, 241, 232, 0.8);
+}
+
+.rincian-baris span:last-child {
+  font-family: var(--mono);
+  color: var(--warm-white);
+}
+
+.rincian-baris--total {
+  padding-top: 12px;
+  border-top: 1px dashed rgba(245, 241, 232, 0.2);
+  font-weight: 500;
+}
+
+/* ---- Tentang ---- */
+.tentang {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.tentang h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin: 0 0 12px;
+}
+
+.tentang p {
+  color: rgba(245, 241, 232, 0.65);
+  max-width: 62ch;
+}
+
+/* ---- Footer ---- */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.85rem;
+  color: rgba(245, 241, 232, 0.4);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+  .intro h1 { font-size: 1.9rem; }
+  .ledger-card { padding: 24px; }
+  .ledger-result { padding: 22px; }
+  .ledger-result__angka { font-size: 1.8rem; }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+
+
+
+
+
+
+/* ---- Tokens ---- */
+:root {
+  --navy: #101820;
+  --navy-soft: #182430;
+  --parchment: #EFE9DA;
+  --parchment-line: #DCD3BC;
+  --ink: #1B2430;
+  --warm-white: #F5F1E8;
+  --brass: #B98B4E;
+  --brass-bright: #D6A85F;
+  --teal: #4C7C6B;
+  --error: #B5533C;
+
+  --serif: "Fraunces", serif;
+  --sans: "IBM Plex Sans", sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--navy);
+  color: var(--warm-white);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+/* ---- Topbar ---- */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.topbar__mark {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.topbar__nav {
+  font-size: 0.85rem;
+  display: flex;
+  gap: 20px;
+}
+
+.topbar__nav a {
+  color: rgba(245, 241, 232, 0.55);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.topbar__nav a:hover {
+  color: var(--brass-bright);
+}
+
+.topbar__mark a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- Hub / Homepage ---- */
+.page--hub {
+  max-width: 760px;
+}
+
+.hero {
+  padding: 24px 0 48px;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.6rem;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  max-width: 16ch;
+}
+
+.hero p {
+  color: rgba(245, 241, 232, 0.65);
+  max-width: 48ch;
+  font-size: 1.05rem;
+}
+
+.daftar-kalkulator {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.kartu-kalkulator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 4px;
+  padding: 28px;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kartu-kalkulator:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.kartu-kalkulator:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.kartu-kalkulator__nomor {
+  font-family: var(--mono);
+  color: var(--brass);
+  font-size: 0.9rem;
+}
+
+.kartu-kalkulator h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.kartu-kalkulator p {
+  color: rgba(27, 36, 48, 0.7);
+  font-size: 0.92rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.kartu-kalkulator__aksi {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--navy);
+  margin-top: 6px;
+}
+
+.kartu-kalkulator--segera {
+  background: transparent;
+  border: 1px dashed rgba(245, 241, 232, 0.25);
+  color: rgba(245, 241, 232, 0.5);
+}
+
+.kartu-kalkulator--segera h2 {
+  color: rgba(245, 241, 232, 0.7);
+}
+
+.kartu-kalkulator--segera p {
+  color: rgba(245, 241, 232, 0.4);
+}
+
+.kartu-kalkulator--segera .kartu-kalkulator__nomor {
+  color: rgba(245, 241, 232, 0.4);
+}
+
+@media (max-width: 560px) {
+  .daftar-kalkulator {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
+
+/* ---- Layout ---- */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+}
+
+.intro h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.4rem;
+  margin: 0 0 12px;
+  max-width: 14ch;
+}
+
+.intro p {
+  color: rgba(245, 241, 232, 0.7);
+  max-width: 46ch;
+  margin: 0 0 40px;
+}
+
+/* ---- Card (form) ---- */
+.ledger-card {
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 4px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  color: rgba(27, 36, 48, 0.75);
+}
+
+.field input {
+  border: none;
+  border-bottom: 1.5px solid var(--parchment-line);
+  background: transparent;
+  padding: 8px 2px;
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.field input:focus {
+  border-bottom-color: var(--brass);
+}
+
+.field input::placeholder {
+  color: rgba(27, 36, 48, 0.32);
+}
+
+.btn-hitung {
+  margin-top: 8px;
+  border: none;
+  background: var(--navy);
+  color: var(--warm-white);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 14px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-hitung:hover {
+  background: var(--navy-soft);
+}
+
+.btn-hitung:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.pesan-error {
+  color: var(--error);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ---- Result ---- */
+.ledger-result {
+  margin-top: 24px;
+  border: 1px solid rgba(245, 241, 232, 0.15);
+  border-radius: 4px;
+  padding: 28px 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ledger-result.tampil {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-hitung:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ledger-result__utama {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.15);
+}
+
+.ledger-result__label {
+  font-size: 0.85rem;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+.ledger-result__angka {
+  font-family: var(--mono);
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: var(--brass-bright);
+}
+
+.ledger-result__rincian {
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rincian-baris {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: rgba(245, 241, 232, 0.8);
+}
+
+.rincian-baris span:last-child {
+  font-family: var(--mono);
+  color: var(--warm-white);
+}
+
+.rincian-baris--total {
+  padding-top: 12px;
+  border-top: 1px dashed rgba(245, 241, 232, 0.2);
+  font-weight: 500;
+}
+
+/* ---- Tentang ---- */
+.tentang {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.tentang h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin: 0 0 12px;
+}
+
+.tentang p {
+  color: rgba(245, 241, 232, 0.65);
+  max-width: 62ch;
+}
+
+/* ---- Footer ---- */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.85rem;
+  color: rgba(245, 241, 232, 0.4);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+  .intro h1 { font-size: 1.9rem; }
+  .ledger-card { padding: 24px; }
+  .ledger-result { padding: 22px; }
+  .ledger-result__angka { font-size: 1.8rem; }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

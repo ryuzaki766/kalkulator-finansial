@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator KPR — Hitung Cicilan Rumah</title>
+  <meta name="description" content="Hitung cicilan bulanan KPR, total bunga, dan total pembayaran dengan cepat dan akurat." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__mark"><a href="index.html">Ledger</a></div>
+    <nav class="topbar__nav">
+      <a href="index.html">Beranda</a>
+      <span class="topbar__aktif">KPR</span>
+      <a href="zakat.html">Zakat</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h1>Kalkulator Cicilan KPR</h1>
+      <p>Masukkan jumlah pinjaman, suku bunga, dan tenor. Ledger akan menghitung cicilan bulananmu.</p>
+    </section>
+
+    <section class="calculator" aria-label="Form kalkulator KPR">
+      <form id="form-kpr" class="ledger-card">
+
+        <div class="field">
+          <label for="pinjaman">Jumlah pinjaman (Rp)</label>
+          <input type="text" inputmode="numeric" id="pinjaman" name="pinjaman" placeholder="500.000.000" required />
+        </div>
+
+        <div class="field">
+          <label for="bunga">Suku bunga per tahun (%)</label>
+          <input type="text" inputmode="decimal" id="bunga" name="bunga" placeholder="7.5" required />
+        </div>
+
+        <div class="field">
+          <label for="tenor">Tenor (tahun)</label>
+          <input type="text" inputmode="numeric" id="tenor" name="tenor" placeholder="15" required />
+        </div>
+
+        <button type="submit" class="btn-hitung">Hitung cicilan</button>
+
+        <p id="pesan-error" class="pesan-error" hidden></p>
+      </form>
+
+      <div id="hasil" class="ledger-result" hidden>
+        <div class="ledger-result__utama">
+          <span class="ledger-result__label">Cicilan per bulan</span>
+          <span id="hasil-cicilan" class="ledger-result__angka">Rp0</span>
+        </div>
+
+        <div class="ledger-result__rincian">
+          <div class="rincian-baris">
+            <span>Lama pinjaman</span>
+            <span id="hasil-bulan">0 bulan</span>
+          </div>
+          <div class="rincian-baris">
+            <span>Total bunga dibayar</span>
+            <span id="hasil-bunga">Rp0</span>
+          </div>
+          <div class="rincian-baris rincian-baris--total">
+            <span>Total seluruh pembayaran</span>
+            <span id="hasil-total">Rp0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tentang">
+      <h2>Cara kerja kalkulator ini</h2>
+      <p>
+        Cicilan dihitung memakai metode anuitas: setiap bulan kamu membayar jumlah tetap
+        yang sama, tapi porsi bunga dan pokoknya berubah seiring waktu. Di awal tenor,
+        porsi bunga lebih besar; menjelang akhir tenor, porsi pokok yang lebih besar.
+        Hasil di sini adalah estimasi — bank bisa menambahkan biaya administrasi,
+        asuransi, atau provisi yang tidak dihitung di sini.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Dibuat untuk membantu siapa pun merencanakan keuangan dengan lebih jelas.</p>
+  </footer>
+
+  <script src="Common.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

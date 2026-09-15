@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Zakat Penghasilan — Hitung Zakat Profesi</title>
+  <meta name="description" content="Hitung zakat penghasilan bulanan berdasarkan nisab emas dengan cepat dan akurat." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__mark"><a href="index.html">Ledger</a></div>
+    <nav class="topbar__nav">
+      <a href="index.html">Beranda</a>
+      <a href="kpr.html">KPR</a>
+      <span class="topbar__aktif">Zakat</span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h1>Kalkulator Zakat Penghasilan</h1>
+      <p>Masukkan pendapatan bulanan dan harga emas saat ini. Ledger akan menghitung apakah kamu sudah wajib zakat dan berapa jumlahnya.</p>
+    </section>
+
+    <section class="calculator" aria-label="Form kalkulator zakat penghasilan">
+      <form id="form-zakat" class="ledger-card">
+
+        <div class="field">
+          <label for="pendapatan">Pendapatan per bulan (Rp)</label>
+          <input type="text" inputmode="numeric" id="pendapatan" name="pendapatan" placeholder="8.000.000" required />
+        </div>
+
+        <div class="field">
+          <label for="harga-emas">Harga emas saat ini (Rp per gram)</label>
+          <input type="text" inputmode="numeric" id="harga-emas" name="harga-emas" placeholder="1.400.000" required />
+        </div>
+
+        <button type="submit" class="btn-hitung">Hitung zakat</button>
+
+        <p id="pesan-error" class="pesan-error" hidden></p>
+      </form>
+
+      <div id="hasil" class="ledger-result" hidden>
+        <div class="ledger-result__utama">
+          <span id="hasil-label" class="ledger-result__label">Zakat per bulan</span>
+          <span id="hasil-zakat" class="ledger-result__angka">Rp0</span>
+        </div>
+
+        <div class="ledger-result__rincian">
+          <div class="rincian-baris">
+            <span>Pendapatan setahun</span>
+            <span id="hasil-pendapatan-tahunan">Rp0</span>
+          </div>
+          <div class="rincian-baris">
+            <span>Nisab (85 gram emas)</span>
+            <span id="hasil-nisab">Rp0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tentang">
+      <h2>Cara kerja kalkulator ini</h2>
+      <p>
+        Zakat penghasilan wajib dibayar kalau pendapatan setahun sudah mencapai
+        nisab, yaitu setara harga 85 gram emas. Kalau sudah mencapai nisab,
+        besar zakat adalah 2.5% dari pendapatan. Harga emas berubah setiap
+        hari, jadi masukkan harga emas terbaru untuk hasil yang akurat.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Dibuat untuk membantu siapa pun merencanakan keuangan dengan lebih jelas.</p>
+  </footer>
+
+  <script src="script-zakat.js"></script>
+</body>
+</html>
