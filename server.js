@@ -1,8 +1,10 @@
 // server.js
 // Backend Express sederhana:
 // 1. Menyajikan file frontend statis dari folder /public
-// 2. Menyediakan endpoint API POST /api/kalkulator/kpr untuk menghitung cicilan KPR
-   require("dotenv").config();
+// 2. Menyediakan endpoint API untuk kalkulator KPR, Zakat, dan Diskon
+// 3. Baca konfigurasi (PORT, NODE_ENV) dari file .env lewat dotenv
+
+require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
@@ -10,8 +12,7 @@ const helmet = require("helmet");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-   const NODE_ENV = process.env.NODE_ENV || "development";
+const NODE_ENV = process.env.NODE_ENV || "development";
 
 const MAX_SAFE_NUMBER = 100_000_000_000;
 
@@ -62,6 +63,23 @@ function validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram }) {
   return true;
 }
 
+function validateDiskonInput({ hargaAwal, persenDiskon }) {
+  if (!isValidFiniteNumber(hargaAwal) || !isValidFiniteNumber(persenDiskon)) {
+    return false;
+  }
+
+  if (
+    hargaAwal <= 0 ||
+    hargaAwal > MAX_SAFE_NUMBER ||
+    persenDiskon < 0 ||
+    persenDiskon > 100
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -79,6 +97,10 @@ app.get("/kpr", (req, res) => {
 
 app.get("/zakat", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "pages", "zakat.html"));
+});
+
+app.get("/diskon", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pages", "diskon.html"));
 });
 
 // ---- LOGIKA PERHITUNGAN KPR ----
@@ -107,7 +129,7 @@ function hitungCicilanKPR({ pinjaman, bungaPersenPerTahun, tenorTahun }) {
   };
 }
 
-// ---- ENDPOINT API ----
+// ---- ENDPOINT API KPR ----
 app.post("/api/kalkulator/kpr", (req, res) => {
   const { pinjaman, bungaPersenPerTahun, tenorTahun } = req.body;
 
@@ -140,12 +162,9 @@ function hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram }) {
   };
 }
 
+// ---- ENDPOINT API ZAKAT ----
 app.post("/api/kalkulator/zakat", (req, res) => {
   const { pendapatanPerBulan, hargaEmasPerGram } = req.body;
-
-  app.use("/api", (req, res) => {
-  res.status(404).json({ error: "Endpoint tidak ditemukan." });
-});
 
   if (!validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram })) {
     return res.status(400).json({
@@ -158,37 +177,65 @@ app.post("/api/kalkulator/zakat", (req, res) => {
   res.json(hasil);
 });
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Halaman atau endpoint tidak ditemukan.",
-  });
-});
+// ---- LOGIKA PERHITUNGAN DISKON ----
+// Diskon persen dari harga awal, hasilnya potongan harga dan harga akhir setelah diskon.
+function hitungDiskon({ hargaAwal, persenDiskon }) {
+  const potongan = hargaAwal * (persenDiskon / 100);
+  const hargaAkhir = hargaAwal - potongan;
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({
-    error: "Terjadi kesalahan server.",
-  });
-});
-
-   app.use((err, req, res, next) => {
-     console.error(err);
-     if (NODE_ENV === "production") {
-       res.status(500).json({ error: "Terjadi kesalahan pada server." });
-     } else {
-       res.status(500).json({ error: err.message, stack: err.stack });
-     }
-   });
-
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server jalan di http://localhost:${PORT} (mode: ${NODE_ENV})`); 
-  });
+  return {
+    potongan: Math.round(potongan),
+    hargaAkhir: Math.round(hargaAkhir),
+  };
 }
 
+// ---- ENDPOINT API DISKON ----
+app.post("/api/kalkulator/diskon", (req, res) => {
+  const { hargaAwal, persenDiskon } = req.body;
 
+  if (!validateDiskonInput({ hargaAwal, persenDiskon })) {
+    return res.status(400).json({
+      error:
+        "Input tidak valid. Harga harus lebih dari 0 dan persen diskon antara 0-100.",
+    });
+  }
+
+  const hasil = hitungDiskon({ hargaAwal, persenDiskon });
+  res.json(hasil);
+});
+
+// ---- CATCH-ALL UNTUK /api YANG SALAH KETIK (harus balas JSON, bukan HTML) ----
+// Ditaruh SETELAH semua route /api di atas, SEBELUM catch-all umum.
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "Endpoint tidak ditemukan." });
+});
+
+// ---- CATCH-ALL UNTUK HALAMAN YANG SALAH KETIK ----
+// Ditaruh PALING BAWAH dari semua route, sebelum error handler.
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "pages", "404.html"));
 });
+
+// ---- ERROR HANDLER (beda perilaku development vs production) ----
+// Middleware 4-argumen ini menangkap error yang dilempar lewat next(err).
+// HARUS jadi app.use() paling terakhir yang didaftarkan.
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (NODE_ENV === "production") {
+    res.status(500).json({ error: "Terjadi kesalahan pada server." });
+  } else {
+    res.status(500).json({ error: err.message, stack: err.stack });
+  }
+});
+
+// require.main === module: server hanya benar-benar "nyala" (listen) kalau
+// file ini dijalankan langsung (node server.js / npm run dev), BUKAN saat
+// di-import oleh file test (supaya test bisa pakai `app` tanpa buka port).
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server jalan di http://localhost:${PORT} (mode: ${NODE_ENV})`);
+  });
+}
 
 module.exports = { app };
