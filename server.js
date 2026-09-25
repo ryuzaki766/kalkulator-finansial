@@ -2,15 +2,72 @@
 // Backend Express sederhana:
 // 1. Menyajikan file frontend statis dari folder /public
 // 2. Menyediakan endpoint API POST /api/kalkulator/kpr untuk menghitung cicilan KPR
+   require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
+const helmet = require("helmet");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Supaya server bisa membaca JSON yang dikirim dari frontend
-app.use(express.json());
+   const NODE_ENV = process.env.NODE_ENV || "development";
+
+const MAX_SAFE_NUMBER = 100_000_000_000;
+
+function isValidFiniteNumber(value) {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function validateKprInput({ pinjaman, bungaPersenPerTahun, tenorTahun }) {
+  if (
+    !isValidFiniteNumber(pinjaman) ||
+    !isValidFiniteNumber(bungaPersenPerTahun) ||
+    !isValidFiniteNumber(tenorTahun)
+  ) {
+    return false;
+  }
+
+  if (
+    pinjaman <= 0 ||
+    pinjaman > MAX_SAFE_NUMBER ||
+    bungaPersenPerTahun < 0 ||
+    bungaPersenPerTahun > 1000 ||
+    tenorTahun <= 0 ||
+    tenorTahun > 100
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram }) {
+  if (
+    !isValidFiniteNumber(pendapatanPerBulan) ||
+    !isValidFiniteNumber(hargaEmasPerGram)
+  ) {
+    return false;
+  }
+
+  if (
+    pendapatanPerBulan <= 0 ||
+    pendapatanPerBulan > MAX_SAFE_NUMBER ||
+    hargaEmasPerGram <= 0 ||
+    hargaEmasPerGram > MAX_SAFE_NUMBER
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
+app.use(express.json({ limit: "1mb" }));
 
 // Sajikan halaman dan aset statis dari folder public.
 app.use(express.static(path.join(__dirname, "public")));
@@ -54,17 +111,10 @@ function hitungCicilanKPR({ pinjaman, bungaPersenPerTahun, tenorTahun }) {
 app.post("/api/kalkulator/kpr", (req, res) => {
   const { pinjaman, bungaPersenPerTahun, tenorTahun } = req.body;
 
-  // Validasi input dasar - jangan percaya input dari user begitu saja
-  if (
-    typeof pinjaman !== "number" ||
-    typeof bungaPersenPerTahun !== "number" ||
-    typeof tenorTahun !== "number" ||
-    pinjaman <= 0 ||
-    bungaPersenPerTahun < 0 ||
-    tenorTahun <= 0
-  ) {
+  if (!validateKprInput({ pinjaman, bungaPersenPerTahun, tenorTahun })) {
     return res.status(400).json({
-      error: "Input tidak valid. Pastikan semua angka terisi dan lebih dari 0.",
+      error:
+        "Input tidak valid. Pastikan semua angka terisi, finite, dan berada dalam batas yang wajar.",
     });
   }
 
@@ -93,14 +143,14 @@ function hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram }) {
 app.post("/api/kalkulator/zakat", (req, res) => {
   const { pendapatanPerBulan, hargaEmasPerGram } = req.body;
 
-  if (
-    typeof pendapatanPerBulan !== "number" ||
-    typeof hargaEmasPerGram !== "number" ||
-    pendapatanPerBulan <= 0 ||
-    hargaEmasPerGram <= 0
-  ) {
+  app.use("/api", (req, res) => {
+  res.status(404).json({ error: "Endpoint tidak ditemukan." });
+});
+
+  if (!validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram })) {
     return res.status(400).json({
-      error: "Input tidak valid. Pastikan semua angka terisi dan lebih dari 0.",
+      error:
+        "Input tidak valid. Pastikan semua angka terisi, finite, dan berada dalam batas yang wajar.",
     });
   }
 
@@ -108,6 +158,37 @@ app.post("/api/kalkulator/zakat", (req, res) => {
   res.json(hasil);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server jalan di http://localhost:${PORT}`);
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Halaman atau endpoint tidak ditemukan.",
+  });
 });
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({
+    error: "Terjadi kesalahan server.",
+  });
+});
+
+   app.use((err, req, res, next) => {
+     console.error(err);
+     if (NODE_ENV === "production") {
+       res.status(500).json({ error: "Terjadi kesalahan pada server." });
+     } else {
+       res.status(500).json({ error: err.message, stack: err.stack });
+     }
+   });
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server jalan di http://localhost:${PORT} (mode: ${NODE_ENV})`); 
+  });
+}
+
+
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "public", "pages", "404.html"));
+});
+
+module.exports = { app };

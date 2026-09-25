@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Environment lokal (berisi konfigurasi mesin masing-masing, jangan di-share)
+.env
+
+# OS / editor
+.DS_Store

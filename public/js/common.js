@@ -15,8 +15,25 @@ function bersihkanAngkaBulat(teks) {
 
 // Angka desimal (persen bunga) - titik/koma terakhir dianggap tanda desimal
 function bersihkanAngkaDesimal(teks) {
-  const dibersihkan = teks.replace(/[^0-9.,]/g, "").replace(",", ".");
-  return dibersihkan === "" ? NaN : Number(dibersihkan);
+  const area = String(teks ?? "").trim();
+  if (area === "") return NaN;
+
+  const normal = area.replace(/\s+/g, "").replace(",", ".");
+  const hanyaAngkaDanTitik = normal.replace(/[^0-9.]/g, "");
+  const bagian = hanyaAngkaDanTitik.split(".");
+
+  if (bagian.length > 2) return NaN;
+
+  const gabung = bagian.join("");
+  return gabung === "" ? NaN : Number(gabung);
+}
+
+function nilaiTersedia(angka) {
+  return Number.isFinite(angka);
+}
+
+function angkaDalamRentang(angka, minimum, maksimum) {
+  return nilaiTersedia(angka) && angka >= minimum && angka <= maksimum;
 }
 
 // Pasang "live formatting": begitu user ngetik angka di sebuah input,

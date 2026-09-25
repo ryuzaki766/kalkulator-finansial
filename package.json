@@ -1,13 +1,21 @@
 {
   "name": "kalkulator-finansial",
   "version": "1.0.0",
-  "description": "Website kalkulator finansial fullstack (KPR, dst)",
+  "description": "Website kalkulator finansial fullstack (KPR, Zakat, dst)",
   "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^8.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
