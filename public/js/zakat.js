@@ -1,50 +1,23 @@
 // zakat.js
+// Tugas file ini di sisi FRONTEND untuk kalkulator Zakat Penghasilan:
+// 1. Ambil input dari form
+// 2. Kirim ke backend (POST /api/kalkulator/zakat)
+// 3. Tampilkan hasil yang dikirim balik oleh backend
+// Fungsi bantu (format angka, animasi, dll) ada di common.js
+
 const form = document.getElementById("form-zakat");
 const tombolHitung = form.querySelector(".btn-hitung");
 const hasilBox = document.getElementById("hasil");
 const pesanError = document.getElementById("pesan-error");
 const MAX_INPUT = 100_000_000_000;
 
-// ---- Helper (dipakai kalau belum ada di file lain) ----
-function nilaiTersedia(n) {
-  return typeof n === "number" && Number.isFinite(n);
-}
+// Live formatting titik ribuan untuk kedua kolom (sama-sama angka bulat).
+pasangFormatOtomatis(document.getElementById("pendapatan"));
+pasangFormatOtomatis(document.getElementById("harga-emas"));
 
-function angkaDalamRentang(n, min, max) {
-  return n >= min && n <= max;
-}
-
-function pasangLoading(tombol, teks) {
-  const teksAsli = tombol.textContent;
-  tombol.disabled = true;
-  tombol.textContent = teks;
-  return () => {
-    tombol.disabled = false;
-    tombol.textContent = teksAsli;
-  };
-}
-
-function formatRupiah(angka) {
-  return "Rp" + Number(angka || 0).toLocaleString("id-ID");
-}
-
-function bersihkanAngkaBulat(teks) {
-  const hanyaAngka = String(teks ?? "").replace(/[^0-9]/g, "");
-  return hanyaAngka === "" ? NaN : Number(hanyaAngka);
-}
-
-function pasangFormatAngka(input) {
-  input.addEventListener("input", () => {
-    const angka = bersihkanAngkaBulat(input.value);
-    input.value = Number.isFinite(angka) ? angka.toLocaleString("id-ID") : "";
-  });
-}
-
-pasangFormatAngka(document.getElementById("pendapatan"));
-pasangFormatAngka(document.getElementById("harga-emas"));
-
-// ---- Tampilkan hasil ----
-function tampilkanHasil(data) {
+// Isi dan tampilkan hasil zakat. Beda dari kalkulator lain karena labelnya
+// berubah tergantung apakah pendapatan sudah wajib zakat atau belum.
+function isiHasilZakat(data) {
   const labelHasil = document.getElementById("hasil-label");
   const angkaHasil = document.getElementById("hasil-zakat");
 
@@ -60,11 +33,7 @@ function tampilkanHasil(data) {
     formatRupiah(data.pendapatanTahunan);
   document.getElementById("hasil-nisab").textContent = formatRupiah(data.nisabTahunan);
 
-  hasilBox.hidden = false;
-  hasilBox.style.display = "block"; // jaga-jaga kalau CSS menyembunyikannya
-  // paksa reflow agar transisi CSS (jika ada) berjalan
-  void hasilBox.offsetWidth;
-  hasilBox.classList.add("tampil");
+  tampilkanHasil(hasilBox);
   hasilBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -72,8 +41,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   pesanError.hidden = true;
-  hasilBox.hidden = true;
-  hasilBox.classList.remove("tampil");
+  sembunyikanHasil(hasilBox);
 
   const pendapatanPerBulan = bersihkanAngkaBulat(document.getElementById("pendapatan").value);
   const hargaEmasPerGram = bersihkanAngkaBulat(document.getElementById("harga-emas").value);
@@ -112,10 +80,8 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    console.log("Respons zakat:", data); // cek nama field di Console (F12)
-    tampilkanHasil(data);
+    isiHasilZakat(data);
   } catch (err) {
-    console.error(err);
     pesanError.textContent = "Tidak bisa terhubung ke server, atau respons server tidak valid.";
     pesanError.hidden = false;
   } finally {
