@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Diskon — Hitung Harga Setelah Potongan</title>
+  <meta name="description" content="Hitung potongan harga dan harga akhir setelah diskon dengan cepat dan akurat." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/calculator.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__mark"><a href="/">Ledger</a></div>
+    <nav class="topbar__nav">
+      <a href="/">Beranda</a>
+      <a href="/kpr">KPR</a>
+      <a href="/zakat">Zakat</a>
+      <span class="topbar__aktif">Diskon</span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h1>Kalkulator Diskon</h1>
+      <p>Masukkan harga awal dan persen diskon. Ledger akan menghitung potongan dan harga akhirnya.</p>
+    </section>
+
+    <section class="calculator" aria-label="Form kalkulator diskon">
+      <form id="form-diskon" class="ledger-card">
+
+        <div class="field">
+          <label for="harga-awal">Harga awal (Rp)</label>
+          <input type="text" inputmode="numeric" id="harga-awal" name="harga-awal" placeholder="250.000" required />
+        </div>
+
+        <div class="field">
+          <label for="persen-diskon">Diskon (%)</label>
+          <input type="text" inputmode="decimal" id="persen-diskon" name="persen-diskon" placeholder="20" required />
+        </div>
+
+        <button type="submit" class="btn-hitung">Hitung diskon</button>
+
+        <p id="pesan-error" class="pesan-error" hidden></p>
+      </form>
+
+      <div id="hasil" class="ledger-result" hidden>
+        <div class="ledger-result__utama">
+          <span class="ledger-result__label">Harga akhir setelah diskon</span>
+          <span id="hasil-harga-akhir" class="ledger-result__angka">Rp0</span>
+        </div>
+
+        <div class="ledger-result__rincian">
+          <div class="rincian-baris">
+            <span>Potongan harga</span>
+            <span id="hasil-potongan">Rp0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tentang">
+      <h2>Cara kerja kalkulator ini</h2>
+      <p>
+        Potongan harga dihitung dari persentase diskon dikali harga awal.
+        Harga akhir adalah harga awal dikurangi potongan tersebut.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Dibuat untuk membantu siapa pun merencanakan keuangan dengan lebih jelas.</p>
+  </footer>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/diskon.js"></script>
+</body>
+</html>
