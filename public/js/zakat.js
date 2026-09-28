@@ -81,7 +81,13 @@ form.addEventListener("submit", async (event) => {
 
   pesanError.hidden = true;
   sembunyikanHasil(hasilBox);
+const metode = metodeTerpilih();
+const config = KONFIG_METODE[metode];
+const pendapatan = bersihkanAngkaBulat(inputPendapatan.value);   // dulu: pendapatanPerBulan
 
+body:JSON.stringify({ metode, [config.fieldApi]: pendapatan, hargaEmasPerGram }),
+
+isiHasilZakat(data, config);                                      // dulu: isiHasilZakat(data)
   const pendapatanPerBulan = bersihkanAngkaBulat(document.getElementById("pendapatan").value);
   const hargaEmasPerGram = bersihkanAngkaBulat(document.getElementById("harga-emas").value);
 
