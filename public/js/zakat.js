@@ -9,17 +9,56 @@ const form = document.getElementById("form-zakat");
 const tombolHitung = form.querySelector(".btn-hitung");
 const hasilBox = document.getElementById("hasil");
 const pesanError = document.getElementById("pesan-error");
+const inputPendapatan = document.getElementById("pendapatan");
+const labelPendapatan = document.getElementById("label-pendapatan");
 const MAX_INPUT = 100_000_000_000;
 
+
+const KONFIG_METODE = {
+  bulanan: {
+    labelInput: "Pendapatan per bulan (Rp)",
+    placeholder: "8.000.000",
+    fieldApi: "pendapatanPerBulan",
+    fieldZakat: "zakatPerBulan",
+    labelHasil: "Zakat per bulan",
+    labelPendapatanTahunan: "Pendapatan setahun",
+  },
+  tahunan: {
+    labelInput: "Total pendapatan setahun (Rp)",
+    placeholder: "96.000.000",
+    fieldApi: "pendapatanPerTahun",
+    fieldZakat: "zakatPerTahun",
+    labelHasil: "Zakat per tahun",
+    labelPendapatanTahunan: "Total pendapatan setahun",
+  },
+};
+
+function metodeTerpilih() {
+  return form.querySelector('input[name="metode"]:checked').value;
+}
+
+function sesuaikanFormDenganMetode() {
+  const config = KONFIG_METODE[metodeTerpilih()];
+  labelPendapatan.textContent = config.labelInput;
+  inputPendapatan.placeholder = config.placeholder;
+  pesanError.hidden = true;
+  sembunyikanHasil(hasilBox);
+}
+
+form.querySelectorAll('input[name="metode"]').forEach((radio) => {
+  radio.addEventListener("change", sesuaikanFormDenganMetode);
+});
 // Live formatting titik ribuan untuk kedua kolom (sama-sama angka bulat).
 pasangFormatOtomatis(document.getElementById("pendapatan"));
 pasangFormatOtomatis(document.getElementById("harga-emas"));
 
 // Isi dan tampilkan hasil zakat. Beda dari kalkulator lain karena labelnya
 // berubah tergantung apakah pendapatan sudah wajib zakat atau belum.
-function isiHasilZakat(data) {
-  const labelHasil = document.getElementById("hasil-label");
-  const angkaHasil = document.getElementById("hasil-zakat");
+function isiHasilZakat(data, config) {                       // ditambah parameter config
+  labelHasil.textContent = config.labelHasil;              // dulu: "Zakat per bulan"
+    angkaHasil.textContent = formatRupiah(data[config.fieldZakat]);  // dulu: data.zakatPerBulan
+  document.getElementById("label-pendapatan-tahunan").textContent =   // baris baru
+    config.labelPendapatanTahunan;
 
   if (data.wajibZakat) {
     labelHasil.textContent = "Zakat per bulan";

@@ -62,6 +62,33 @@ function validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram }) {
 
   return true;
 }
+// Metode perhitungan zakat penghasilan yang didukung:
+// - bulanan: penghasilan dicek & dizakati tiap bulan (perilaku lama, jadi default)
+// - tahunan: penghasilan setahun dikumpulkan, dicek & dizakati sekali
+const METODE_ZAKAT = ["bulanan", "tahunan"];
+const GRAM_NISAB = 85; // Fatwa MUI No. 3 Tahun 2003 & BAZNAS
+const KADAR_ZAKAT = 0.025; // 2,5%
+
+function validateZakatTahunanInput({ pendapatanPerTahun, hargaEmasPerGram }) {
+  if (
+    !isValidFiniteNumber(pendapatanPerTahun) ||
+    !isValidFiniteNumber(hargaEmasPerGram)
+  ) {
+    return false;
+  }
+
+  if (
+    pendapatanPerTahun <= 0 ||
+    pendapatanPerTahun > MAX_SAFE_NUMBER ||
+    hargaEmasPerGram <= 0 ||
+    hargaEmasPerGram > MAX_SAFE_NUMBER
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 
 function validateDiskonInput({ hargaAwal, persenDiskon }) {
   if (!isValidFiniteNumber(hargaAwal) || !isValidFiniteNumber(persenDiskon)) {
@@ -152,7 +179,7 @@ function hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram }) {
   const nisabTahunan = GRAM_NISAB * hargaEmasPerGram;
   const pendapatanTahunan = pendapatanPerBulan * 12;
   const wajibZakat = pendapatanTahunan >= nisabTahunan;
-  const zakatPerBulan = wajibZakat ? pendapatanPerBulan * 0.025 : 0;
+  const zakatPerBulan = wajibZakat ? pendapatanPerBulan * KADAR_ZAKAT: 0;
 
   return {
     wajibZakat,
@@ -162,20 +189,46 @@ function hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram }) {
   };
 }
 
+function hitungZakatTahunan({ pendapatanPerTahun, hargaEmasPerGram }) {
+  const nisabTahunan = GRAM_NISAB * hargaEmasPerGram;
+  const wajibZakat = pendapatanPerTahun >= nisabTahunan;
+  const zakatPerTahun = wajibZakat ? pendapatanPerTahun * KADAR_ZAKAT : 0;
+
+  return {
+    wajibZakat,
+    zakatPerTahun: Math.round(zakatPerTahun),
+    nisabTahunan: Math.round(nisabTahunan),
+    pendapatanTahunan: Math.round(pendapatanPerTahun),
+  };
+}
+
+
 // ---- ENDPOINT API ZAKAT ----
 app.post("/api/kalkulator/zakat", (req, res) => {
-  const { pendapatanPerBulan, hargaEmasPerGram } = req.body;
+  const { metode = "bulanan" } = req.body;
 
-  if (!validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram })) {
+  if (!METODE_ZAKAT.includes(metode)) {              // BARU
     return res.status(400).json({
-      error:
-        "Input tidak valid. Pastikan semua angka terisi, finite, dan berada dalam batas yang wajar.",
+      error: "Metode tidak valid. Pilih 'bulanan' atau 'tahunan'.",
     });
   }
 
-  const hasil = hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram });
-  res.json(hasil);
+  if (metode === "tahunan") {                        // BARU (satu blok if)
+    const { pendapatanPerTahun, hargaEmasPerGram } = req.body;
+
+    if (!validateZakatTahunanInput({ pendapatanPerTahun, hargaEmasPerGram })) {
+      return res.status(400).json({
+        error:
+          "Input tidak valid. Pastikan semua angka terisi, finite, dan berada dalam batas yang wajar.",
+      });
+    }
+
+    return res.json(hitungZakatTahunan({ pendapatanPerTahun, hargaEmasPerGram }));
+  }
+
+  // ... cabang bulanan: kode lama, tidak berubah
 });
+
 
 // ---- LOGIKA PERHITUNGAN DISKON ----
 // Diskon persen dari harga awal, hasilnya potongan harga dan harga akhir setelah diskon.

@@ -30,6 +30,25 @@
     <section class="calculator" aria-label="Form kalkulator zakat penghasilan">
       <form id="form-zakat" class="ledger-card">
 
+<fieldset class="pilihan-metode">
+  <legend>Metode perhitungan</legend>
+
+  <label class="pilihan-metode__opsi">
+    <input type="radio" name="metode" value="bulanan" checked />
+    <span>
+      <strong>Bulanan</strong>
+      <small>Dicek dan dizakati tiap bulan. Cocok untuk gaji tetap.</small>
+    </span>
+  </label>
+
+  <label class="pilihan-metode__opsi">
+    <input type="radio" name="metode" value="tahunan" />
+    <span>
+      <strong>Tahunan</strong>
+      <small>Penghasilan setahun dikumpulkan dulu. Cocok untuk penghasilan tidak tetap.</small>
+    </span>
+  </label>
+</fieldset>
         <div class="field">
           <label for="pendapatan">Pendapatan per bulan (Rp)</label>
           <input type="text" inputmode="numeric" id="pendapatan" name="pendapatan" placeholder="8.000.000" required />
@@ -53,7 +72,7 @@
 
         <div class="ledger-result__rincian">
           <div class="rincian-baris">
-            <span>Pendapatan setahun</span>
+            <span id="label-pendapatan-tahunan">Pendapatan setahun</span>
             <span id="hasil-pendapatan-tahunan">Rp0</span>
           </div>
           <div class="rincian-baris">
@@ -72,6 +91,25 @@
         besar zakat adalah 2.5% dari pendapatan. Harga emas berubah setiap
         hari, jadi masukkan harga emas terbaru untuk hasil yang akurat.
       </p>
+      <h3>Variasi metode perhitungan</h3>
+<ul>
+  <li><strong>Bulanan.</strong> Nisab bulanan adalah seperduabelas dari nisab tahunan. ...</li>
+  <li><strong>Tahunan.</strong> Penghasilan dikumpulkan selama setahun. ...</li>
+  <li><strong>Penghasilan bersih (tidak dihitung di sini).</strong> Sebagian ulama, termasuk Yusuf al-Qaradhawi, ...</li>
+</ul>
+
+<h3>Sumber aturan</h3>
+<ul>
+  <li><a href="https://mui.or.id/..." target="_blank" rel="noopener">Fatwa MUI Nomor 3 Tahun 2003</a>: ...</li>
+  <li>Peraturan Menteri Agama Nomor 31 Tahun 2019, QS Al-Baqarah ayat 267, ... <a href="https://baznas.go.id/zakatpenghasilan" ...>BAZNAS</a>.</li>
+  <li>SK Ketua BAZNAS Nomor 15 Tahun 2026: nisab 2026 sebesar Rp91.681.728 per tahun atau Rp7.640.144 per bulan, ...</li>
+</ul>
+
+<p>
+  Hasil di sini adalah estimasi. Untuk kasus khusus seperti utang atau
+  penghasilan tidak tetap, sebaiknya konsultasikan ke lembaga zakat resmi
+  seperti BAZNAS.
+</p>
     </section>
   </main>
 
