@@ -133,7 +133,73 @@
   border-top: 1px dashed rgba(245, 241, 232, 0.2);
   font-weight: 500;
 }
+/* ---- Pilihan metode perhitungan (radio) ---- */
+.pilihan-metode {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  border: none;
+  padding: 0;
+}
 
+.pilihan-metode legend {
+  margin-bottom: 4px;
+  padding: 0;
+  color: rgba(27, 36, 48, 0.75);
+  font-size: 0.9rem;
+}
+
+.pilihan-metode__opsi {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.pilihan-metode__opsi input {
+  margin-top: 4px;
+  accent-color: var(--brass);
+}
+
+.pilihan-metode__opsi strong {
+  display: block;
+  font-weight: 500;
+}
+
+.pilihan-metode__opsi small {
+  display: block;
+  color: rgba(27, 36, 48, 0.65);
+  font-size: 0.82rem;
+}
+
+/* ---- Daftar penjelasan di section "tentang" ---- */
+.tentang h3 {
+  margin: 28px 0 10px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.tentang ul {
+  max-width: 62ch;
+  margin: 0 0 16px;
+  padding-left: 20px;
+  color: rgba(245, 241, 232, 0.65);
+}
+
+.tentang li {
+  margin-bottom: 10px;
+}
+
+.tentang li strong {
+  color: var(--warm-white);
+  font-weight: 500;
+}
+
+.tentang a {
+  color: var(--brass-bright);
+}
 @media (max-width: 480px) {
   .ledger-card { padding: 24px; }
   .ledger-result { padding: 22px; }
