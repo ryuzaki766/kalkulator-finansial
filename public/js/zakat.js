@@ -1,8 +1,8 @@
 // zakat.js
-// Tugas file ini di sisi FRONTEND untuk kalkulator Zakat Penghasilan:
+// Frontend kalkulator Zakat Penghasilan:
 // 1. Ambil input dari form
 // 2. Kirim ke backend (POST /api/kalkulator/zakat)
-// 3. Tampilkan hasil yang dikirim balik oleh backend
+// 3. Tampilkan hasil dari backend
 // Fungsi bantu (format angka, animasi, dll) ada di common.js
 
 const form = document.getElementById("form-zakat");
@@ -10,9 +10,11 @@ const tombolHitung = form.querySelector(".btn-hitung");
 const hasilBox = document.getElementById("hasil");
 const pesanError = document.getElementById("pesan-error");
 const inputPendapatan = document.getElementById("pendapatan");
+const inputHargaEmas = document.getElementById("harga-emas");
 const labelPendapatan = document.getElementById("label-pendapatan");
+const labelHasil = document.getElementById("label-hasil");   // cek id di zakat.html
+const angkaHasil = document.getElementById("angka-hasil");   // cek id di zakat.html
 const MAX_INPUT = 100_000_000_000;
-
 
 const KONFIG_METODE = {
   bulanan: {
@@ -48,21 +50,19 @@ function sesuaikanFormDenganMetode() {
 form.querySelectorAll('input[name="metode"]').forEach((radio) => {
   radio.addEventListener("change", sesuaikanFormDenganMetode);
 });
-// Live formatting titik ribuan untuk kedua kolom (sama-sama angka bulat).
-pasangFormatOtomatis(document.getElementById("pendapatan"));
-pasangFormatOtomatis(document.getElementById("harga-emas"));
 
-// Isi dan tampilkan hasil zakat. Beda dari kalkulator lain karena labelnya
-// berubah tergantung apakah pendapatan sudah wajib zakat atau belum.
-function isiHasilZakat(data, config) {                       // ditambah parameter config
-  labelHasil.textContent = config.labelHasil;              // dulu: "Zakat per bulan"
-    angkaHasil.textContent = formatRupiah(data[config.fieldZakat]);  // dulu: data.zakatPerBulan
-  document.getElementById("label-pendapatan-tahunan").textContent =   // baris baru
+// Live formatting titik ribuan untuk kedua kolom.
+pasangFormatOtomatis(inputPendapatan);
+pasangFormatOtomatis(inputHargaEmas);
+
+// Isi dan tampilkan hasil zakat sesuai metode yang dipilih.
+function isiHasilZakat(data, config) {
+  document.getElementById("label-pendapatan-tahunan").textContent =
     config.labelPendapatanTahunan;
 
   if (data.wajibZakat) {
-    labelHasil.textContent = "Zakat per bulan";
-    angkaHasil.textContent = formatRupiah(data.zakatPerBulan);
+    labelHasil.textContent = config.labelHasil;
+    angkaHasil.textContent = formatRupiah(data[config.fieldZakat]);
   } else {
     labelHasil.textContent = "Status";
     angkaHasil.textContent = "Belum wajib zakat";
@@ -81,20 +81,16 @@ form.addEventListener("submit", async (event) => {
 
   pesanError.hidden = true;
   sembunyikanHasil(hasilBox);
-const metode = metodeTerpilih();
-const config = KONFIG_METODE[metode];
-const pendapatan = bersihkanAngkaBulat(inputPendapatan.value);   // dulu: pendapatanPerBulan
 
-body:JSON.stringify({ metode, [config.fieldApi]: pendapatan, hargaEmasPerGram }),
-
-isiHasilZakat(data, config);                                      // dulu: isiHasilZakat(data)
-  const pendapatanPerBulan = bersihkanAngkaBulat(document.getElementById("pendapatan").value);
-  const hargaEmasPerGram = bersihkanAngkaBulat(document.getElementById("harga-emas").value);
+  const metode = metodeTerpilih();
+  const config = KONFIG_METODE[metode];
+  const pendapatan = bersihkanAngkaBulat(inputPendapatan.value);
+  const hargaEmasPerGram = bersihkanAngkaBulat(inputHargaEmas.value);
 
   const valid =
-    nilaiTersedia(pendapatanPerBulan) &&
+    nilaiTersedia(pendapatan) &&
     nilaiTersedia(hargaEmasPerGram) &&
-    angkaDalamRentang(pendapatanPerBulan, 1, MAX_INPUT) &&
+    angkaDalamRentang(pendapatan, 1, MAX_INPUT) &&
     angkaDalamRentang(hargaEmasPerGram, 1, MAX_INPUT);
 
   if (!valid) {
@@ -109,7 +105,7 @@ isiHasilZakat(data, config);                                      // dulu: isiHa
     const response = await fetch("/api/kalkulator/zakat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pendapatanPerBulan, hargaEmasPerGram }),
+      body: JSON.stringify({ metode, [config.fieldApi]: pendapatan, hargaEmasPerGram }),
     });
 
     let data;
@@ -125,8 +121,9 @@ isiHasilZakat(data, config);                                      // dulu: isiHa
       return;
     }
 
-    isiHasilZakat(data);
+    isiHasilZakat(data, config);
   } catch (err) {
+    console.error(err);
     pesanError.textContent = "Tidak bisa terhubung ke server, atau respons server tidak valid.";
     pesanError.hidden = false;
   } finally {

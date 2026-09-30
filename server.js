@@ -207,13 +207,15 @@ function hitungZakatTahunan({ pendapatanPerTahun, hargaEmasPerGram }) {
 app.post("/api/kalkulator/zakat", (req, res) => {
   const { metode = "bulanan" } = req.body;
 
-  if (!METODE_ZAKAT.includes(metode)) {              // BARU
+  if (!METODE_ZAKAT.includes(metode)) {
     return res.status(400).json({
       error: "Metode tidak valid. Pilih 'bulanan' atau 'tahunan'.",
     });
   }
 
-  if (metode === "tahunan") {                        // BARU (satu blok if)
+  // ---- METODE TAHUNAN ----
+  // Penghasilan setahun dikumpulkan dulu, lalu dicek terhadap nisab sekali.
+  if (metode === "tahunan") {
     const { pendapatanPerTahun, hargaEmasPerGram } = req.body;
 
     if (!validateZakatTahunanInput({ pendapatanPerTahun, hargaEmasPerGram })) {
@@ -223,10 +225,23 @@ app.post("/api/kalkulator/zakat", (req, res) => {
       });
     }
 
-    return res.json(hitungZakatTahunan({ pendapatanPerTahun, hargaEmasPerGram }));
+    const hasil = hitungZakatTahunan({ pendapatanPerTahun, hargaEmasPerGram });
+    return res.json({ metode, ...hasil });
   }
 
-  // ... cabang bulanan: kode lama, tidak berubah
+  // ---- METODE BULANAN ----
+  // Penghasilan dicek dan dizakati tiap bulan.
+  const { pendapatanPerBulan, hargaEmasPerGram } = req.body;
+
+  if (!validateZakatInput({ pendapatanPerBulan, hargaEmasPerGram })) {
+    return res.status(400).json({
+      error:
+        "Input tidak valid. Pastikan semua angka terisi, finite, dan berada dalam batas yang wajar.",
+    });
+  }
+
+  const hasil = hitungZakatPenghasilan({ pendapatanPerBulan, hargaEmasPerGram });
+  return res.json({ metode, ...hasil });
 });
 
 
