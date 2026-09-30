@@ -12,8 +12,8 @@ const pesanError = document.getElementById("pesan-error");
 const inputPendapatan = document.getElementById("pendapatan");
 const inputHargaEmas = document.getElementById("harga-emas");
 const labelPendapatan = document.getElementById("label-pendapatan");
-const labelHasil = document.getElementById("label-hasil");   // cek id di zakat.html
-const angkaHasil = document.getElementById("angka-hasil");   // cek id di zakat.html
+const labelHasil = document.getElementById("hasil-label");   // cek id di zakat.html
+const angkaHasil = document.getElementById("hasil-zakat");   // cek id di zakat.html
 const MAX_INPUT = 100_000_000_000;
 
 const KONFIG_METODE = {
