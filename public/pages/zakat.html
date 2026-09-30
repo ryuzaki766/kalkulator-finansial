@@ -18,39 +18,41 @@
       <a href="/">Beranda</a>
       <a href="/kpr">KPR</a>
       <span class="topbar__aktif">Zakat</span>
+      <a href="/diskon">Diskon</a>
     </nav>
   </header>
 
   <main class="page">
     <section class="intro">
       <h1>Kalkulator Zakat Penghasilan</h1>
-      <p>Masukkan pendapatan bulanan dan harga emas saat ini. Ledger akan menghitung apakah kamu sudah wajib zakat dan berapa jumlahnya.</p>
+      <p>Pilih metode perhitungan, lalu masukkan pendapatan dan harga emas saat ini. Ledger akan menghitung apakah kamu sudah wajib zakat dan berapa jumlahnya.</p>
     </section>
 
     <section class="calculator" aria-label="Form kalkulator zakat penghasilan">
       <form id="form-zakat" class="ledger-card">
 
-<fieldset class="pilihan-metode">
-  <legend>Metode perhitungan</legend>
+        <fieldset class="pilihan-metode">
+          <legend>Metode perhitungan</legend>
 
-  <label class="pilihan-metode__opsi">
-    <input type="radio" name="metode" value="bulanan" checked />
-    <span>
-      <strong>Bulanan</strong>
-      <small>Dicek dan dizakati tiap bulan. Cocok untuk gaji tetap.</small>
-    </span>
-  </label>
+          <label class="pilihan-metode__opsi">
+            <input type="radio" name="metode" value="bulanan" checked />
+            <span>
+              <strong>Bulanan</strong>
+              <small>Dicek dan dizakati tiap bulan. Cocok untuk gaji tetap.</small>
+            </span>
+          </label>
 
-  <label class="pilihan-metode__opsi">
-    <input type="radio" name="metode" value="tahunan" />
-    <span>
-      <strong>Tahunan</strong>
-      <small>Penghasilan setahun dikumpulkan dulu. Cocok untuk penghasilan tidak tetap.</small>
-    </span>
-  </label>
-</fieldset>
+          <label class="pilihan-metode__opsi">
+            <input type="radio" name="metode" value="tahunan" />
+            <span>
+              <strong>Tahunan</strong>
+              <small>Penghasilan setahun dikumpulkan dulu. Cocok untuk penghasilan tidak tetap.</small>
+            </span>
+          </label>
+        </fieldset>
+
         <div class="field">
-          <label for="pendapatan">Pendapatan per bulan (Rp)</label>
+          <label for="pendapatan" id="label-pendapatan">Pendapatan per bulan (Rp)</label>
           <input type="text" inputmode="numeric" id="pendapatan" name="pendapatan" placeholder="8.000.000" required />
         </div>
 
@@ -91,32 +93,72 @@
         besar zakat adalah 2.5% dari pendapatan. Harga emas berubah setiap
         hari, jadi masukkan harga emas terbaru untuk hasil yang akurat.
       </p>
+
       <h3>Variasi metode perhitungan</h3>
-<ul>
-  <li><strong>Bulanan.</strong> Nisab bulanan adalah seperduabelas dari nisab tahunan. ...</li>
-  <li><strong>Tahunan.</strong> Penghasilan dikumpulkan selama setahun. ...</li>
-  <li><strong>Penghasilan bersih (tidak dihitung di sini).</strong> Sebagian ulama, termasuk Yusuf al-Qaradhawi, ...</li>
-</ul>
+      <ul>
+        <li>
+          <strong>Bulanan.</strong> Nisab bulanan adalah seperduabelas dari nisab
+          tahunan. Kalau penghasilan sebulan mencapai nisab bulanan, zakatnya 2,5%
+          dari penghasilan bulan itu. Untuk gaji tetap, hasilnya setara dengan
+          mengecek penghasilan setahun.
+        </li>
+        <li>
+          <strong>Tahunan.</strong> Penghasilan dikumpulkan selama setahun. Kalau
+          totalnya mencapai nisab, zakatnya 2,5% dari total setahun. Cocok untuk
+          penghasilan yang berubah-ubah, atau kalau penghasilan sebulan belum
+          mencapai nisab.
+        </li>
+        <li>
+          <strong>Penghasilan bersih (tidak dihitung di sini).</strong> Sebagian
+          ulama, termasuk Yusuf al-Qaradhawi, berpendapat zakat hanya wajib atas
+          harta yang melebihi kebutuhan pokok dan bebas dari utang. Cara
+          mengurangkannya berbeda-beda, jadi kalkulator ini menghitung dari angka
+          yang kamu masukkan apa adanya. Kalau kamu mengikuti pandangan ini,
+          konsultasikan cara pengurangannya ke lembaga zakat.
+        </li>
+      </ul>
 
-<h3>Sumber aturan</h3>
-<ul>
-  <li><a href="https://mui.or.id/..." target="_blank" rel="noopener">Fatwa MUI Nomor 3 Tahun 2003</a>: ...</li>
-  <li>Peraturan Menteri Agama Nomor 31 Tahun 2019, QS Al-Baqarah ayat 267, ... <a href="https://baznas.go.id/zakatpenghasilan" ...>BAZNAS</a>.</li>
-  <li>SK Ketua BAZNAS Nomor 15 Tahun 2026: nisab 2026 sebesar Rp91.681.728 per tahun atau Rp7.640.144 per bulan, ...</li>
-</ul>
+      <h3>Sumber aturan</h3>
+      <ul>
+        <li>
+          <a href="https://mui.or.id/public/baca/bimbingan/zakat-penghasilan-bagi-pegawai-dan-tenaga-profesional-dalam-fatwa-mui-nomor-3-tahun-2003-tentang-zakat-profesi-6a618674237e0" target="_blank" rel="noopener">Fatwa MUI Nomor 3 Tahun 2003</a>:
+          semua penghasilan halal wajib dizakati bila mencapai nisab dalam satu
+          tahun (85 gram emas), dengan kadar 2,5%.
+        </li>
+        <li>
+          Peraturan Menteri Agama Nomor 31 Tahun 2019, QS Al-Baqarah ayat 267,
+          dan pendapat Yusuf al-Qaradhawi, sebagaimana dirujuk
+          <a href="https://baznas.go.id/zakatpenghasilan" target="_blank" rel="noopener">BAZNAS</a>.
+        </li>
+        <li>
+          SK Ketua BAZNAS Nomor 15 Tahun 2026: nisab 2026 sebesar Rp91.681.728 per
+          tahun atau Rp7.640.144 per bulan, dihitung dari harga rata-rata emas 14
+          karat sepanjang 2025. Kalkulator ini memakai harga emas yang kamu isi,
+          jadi hasilnya bisa sedikit berbeda dari angka SK tersebut.
+        </li>
+      </ul>
 
-<p>
-  Hasil di sini adalah estimasi. Untuk kasus khusus seperti utang atau
-  penghasilan tidak tetap, sebaiknya konsultasikan ke lembaga zakat resmi
-  seperti BAZNAS.
-</p>
+      <h3>Batasan perhitungan</h3>
+      <ul>
+        <li>Kalkulator ini hanya menghitung zakat penghasilan (profesi), bukan zakat maal, zakat emas/perak, atau zakat perdagangan.</li>
+        <li>Kalau kamu punya beberapa sumber penghasilan, jumlahkan sendiri sebelum dimasukkan — kalkulator ini hanya menerima satu angka pendapatan.</li>
+        <li>Harga emas memakai angka yang kamu ketik sendiri, bukan harga resmi terkini dari BAZNAS.</li>
+      </ul>
+
+      <h3>Disclaimer</h3>
+      <p>
+        Hasil di halaman ini adalah estimasi, bukan fatwa atau ketetapan resmi.
+        Untuk kasus yang lebih kompleks (utang, penghasilan tidak tetap, atau
+        harta lain), konsultasikan ke BAZNAS atau lembaga amil zakat terpercaya.
+      </p>
     </section>
   </main>
 
   <footer class="footer">
     <p>Dibuat untuk membantu siapa pun merencanakan keuangan dengan lebih jelas.</p>
   </footer>
-<script src="../js/common.js"></script>
+
+  <script src="../js/common.js"></script>
   <script src="../js/zakat.js"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@
 <body>
 
   <header class="topbar">
-    <div class="topbar__mark"><a href="/">FinCalc</a></div>
+    <div class="topbar__mark"><a href="/">Ledger</a></div>
     <nav class="topbar__nav">
       <a href="/">Beranda</a>
       <a href="/kpr">KPR</a>
@@ -66,6 +66,19 @@
       <p>
         Potongan harga dihitung dari persentase diskon dikali harga awal.
         Harga akhir adalah harga awal dikurangi potongan tersebut.
+      </p>
+
+      <h3>Batasan perhitungan</h3>
+      <ul>
+        <li>Pajak (PPN) tidak dihitung. Kalau toko menambahkan pajak setelah diskon, harga akhir sebenarnya bisa berbeda.</li>
+        <li>Diskon bertingkat (misal "50% + 20%") tidak didukung — kalkulator ini hanya menghitung satu persen diskon sekaligus.</li>
+        <li>Pembulatan harga di kasir (mis. dibulatkan ke atas Rp500 terdekat) tidak diterapkan di sini.</li>
+      </ul>
+
+      <h3>Disclaimer</h3>
+      <p>
+        Hasil di halaman ini adalah perkiraan. Harga akhir yang sebenarnya di kasir
+        bisa berbeda tergantung kebijakan toko, pajak, dan biaya tambahan lainnya.
       </p>
     </section>
   </main>

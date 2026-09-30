@@ -84,10 +84,20 @@ function sembunyikanHasil(kotakHasil) {
 // Ubah tombol jadi status "loading" - disable + ganti teks
 function pasangLoading(tombol, teksLoading) {
   const teksAsli = tombol.textContent;
+  const formTerkait = tombol.closest("form");
+  const semuaInput = formTerkait ? formTerkait.querySelectorAll("input") : [];
+
   tombol.disabled = true;
+  tombol.classList.add("btn-hitung--loading");
+  tombol.setAttribute("aria-busy", "true");
   tombol.textContent = teksLoading;
+  semuaInput.forEach((input) => (input.disabled = true));
+
   return () => {
     tombol.disabled = false;
+    tombol.classList.remove("btn-hitung--loading");
+    tombol.removeAttribute("aria-busy");
     tombol.textContent = teksAsli;
+    semuaInput.forEach((input) => (input.disabled = false));
   };
 }
