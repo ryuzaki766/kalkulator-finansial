@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { app } = require('../server');
+const app = require("../server");
 
 async function callApi(path, payload) {
   const server = app.listen(0);
