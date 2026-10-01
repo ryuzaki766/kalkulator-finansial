@@ -118,17 +118,9 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // URL halaman yang mudah dibaca, sementara file HTML tetap terorganisasi di public/pages.
-app.get("/kpr", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "pages", "kpr.html"));
-});
-
-app.get("/zakat", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "pages", "zakat.html"));
-});
-
-app.get("/diskon", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "pages", "diskon.html"));
-});
+app.get("/kpr", (req, res) => res.redirect("/pages/kpr.html"));
+app.get("/zakat", (req, res) => res.redirect("/pages/zakat.html"));
+app.get("/diskon", (req, res) => res.redirect("/pages/diskon.html"));
 
 // ---- LOGIKA PERHITUNGAN KPR ----
 // Rumus anuitas: cicilan bulanan tetap dari pinjaman dengan bunga tetap per bulan
